@@ -1,0 +1,77 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb" // Assuming you're using MongoDB with Prisma
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  publicRating   Int
+  publicCount    Int
+  reviewerRating Int
+  reviewerCount  Int
+  totalScore     Int
+  isRecommended  Boolean
+  desc           String
+  imageLink      String
+  buyLink        String
+  previewLink    String
+  reviewerAlloted String[]
+  reviewerResponse Json[]
+  users          Json[]
+  reject         Json[]
+  // reviewer1    Json? // Corresponding to the commented-out section
+}
+// schema.prisma (continued)
+
+model RecommendedBook {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  recomendedBy    String
+  name            String
+  desc            String
+  imageLink       String
+  buyLink         String
+  previewLink     String
+  reviewersAlotted String[]
+  underReview     Boolean
+  referenceId     String
+  date            DateTime
+  reject          String[]
+}
+// schema.prisma (continued)
+
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  age         Int?
+  gender      String?
+  role        String?
+  field       String?
+  collegeName String?
+  degree      String?
+  year        String?
+  password    String
+}
+// schema.prisma (continued)
+
+model ReviewerQueue {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  reviewerid String
+  tobereviewed String[]
+  reviewed     String[]
+}
+
+// schema.prisma (continued)
+
+model BooksForLandingPage {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  type  String
+  books Json[]
+}
